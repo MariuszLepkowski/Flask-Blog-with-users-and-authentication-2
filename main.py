@@ -55,10 +55,10 @@ class User(UserMixin, db.Model):
 with app.app_context():
     db.create_all()
 
+
 @login_manager.user_loader
 def load_user(user_id):
-    return User.get(user_id)
-
+    return db.session.execute(db.select(User).where(User.id == user_id))
 
 # TODO: Use Werkzeug to hash the user's password when creating a new user.
 @app.route('/register', methods=['GET', 'POST'])
@@ -84,6 +84,19 @@ def register():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
+
+    if form.validate_on_submit():
+        user = db.session.execute(db.select(User).where(User.email == form.email.data)).scalar()
+
+        if user:
+            if check_password_hash(pwhash=user.password, password=form.password.data):
+                login_user(user)
+                return f"Hello {user.name}"
+            else:
+                return "Wrong password."
+        else:
+            return f"The user does not exist. Please register."
+
     return render_template("login.html", form=form)
 
 
