@@ -8,7 +8,7 @@ from flask_sqlalchemy import SQLAlchemy
 from functools import wraps
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.orm import relationship
-from forms import RegisterForm
+from forms import RegisterForm, LoginForm
 from forms import CreatePostForm
 from dotenv import load_dotenv
 import os
@@ -81,9 +81,10 @@ def register():
 
 
 # TODO: Retrieve a user from the database based on their email. 
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
-    return render_template("login.html")
+    form = LoginForm()
+    return render_template("login.html", form=form)
 
 
 @app.route('/logout')
