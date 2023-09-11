@@ -58,7 +58,7 @@ with app.app_context():
 
 @login_manager.user_loader
 def load_user(user_id):
-    return db.session.execute(db.select(User).where(User.id == user_id))
+    return db.get_or_404(User, user_id)
 
 # TODO: Use Werkzeug to hash the user's password when creating a new user.
 @app.route('/register', methods=['GET', 'POST'])
@@ -114,6 +114,7 @@ def login():
 
 @app.route('/logout')
 def logout():
+    logout_user()
     return redirect(url_for('get_all_posts'))
 
 
