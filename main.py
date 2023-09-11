@@ -66,18 +66,26 @@ def register():
     form = RegisterForm()
 
     if form.validate_on_submit():
-        new_user = User(
-            email=form.email.data,
-            password=generate_password_hash(password=form.password.data, method='pbkdf2', salt_length=15),
-            name=form.name.data,
-        )
+        emails_in_db = db.session.execute(db.select(User.email)).scalars().all()
+        email_from_form = form.email.data
 
-        db.session.add(new_user)
-        db.session.commit()
+        for email in emails_in_db:
+            if email == email_from_form:
+                flash("You've already signed up with that email. Please log in instead.")
+                return redirect(url_for('login'))
+            else:
+                new_user = User(
+                    email=email_from_form,
+                    password=generate_password_hash(password=form.password.data, method='pbkdf2', salt_length=15),
+                    name=form.name.data,
+                )
 
-        login_user(new_user)
+                db.session.add(new_user)
+                db.session.commit()
 
-        return redirect(url_for('get_all_posts'))
+                login_user(new_user)
+
+                return redirect(url_for('get_all_posts'))
 
     return render_template("register.html", form=form)
 
