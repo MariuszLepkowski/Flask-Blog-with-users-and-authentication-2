@@ -75,6 +75,8 @@ def register():
         db.session.add(new_user)
         db.session.commit()
 
+        login_user(new_user)
+
         return redirect(url_for('get_all_posts'))
 
     return render_template("register.html", form=form)
@@ -91,7 +93,7 @@ def login():
         if user:
             if check_password_hash(pwhash=user.password, password=form.password.data):
                 login_user(user)
-                return f"Hello {user.name}"
+                return redirect(url_for('get_all_posts'))
             else:
                 return "Wrong password."
         else:
