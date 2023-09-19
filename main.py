@@ -42,6 +42,7 @@ class BlogPost(db.Model):
     author_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     author = db.relationship('User', back_populates='posts')
     img_url = db.Column(db.String(250), nullable=False)
+    comments = db.relationship('Comment', back_populates='parent_post')
 
 
 class Comment(db.Model):
@@ -50,6 +51,8 @@ class Comment(db.Model):
     text = db.Column(db.Text, nullable=False)
     comment_author = db.relationship('User', back_populates='posts')
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    parent_post = db.relationship('BlogPost', back_populates='comments')
+    parent_post_id = db.Column(db.Integer, db.ForeignKey('blog_posts.id'), nullable=False)
 
 
 # TODO: Create a User table for all your registered users. 
