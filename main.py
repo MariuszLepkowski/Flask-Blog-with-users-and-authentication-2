@@ -44,6 +44,12 @@ class BlogPost(db.Model):
     img_url = db.Column(db.String(250), nullable=False)
 
 
+class Comment(db.Model):
+    __tablename__ = "comments"
+    id = db.Column(db.Integer, primary_key=True)
+    text = db.Column(db.Text, nullable=False)
+
+
 # TODO: Create a User table for all your registered users. 
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
