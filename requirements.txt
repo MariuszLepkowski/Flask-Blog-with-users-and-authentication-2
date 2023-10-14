@@ -8,5 +8,5 @@ Flask_WTF==1.1.1
 Werkzeug>=2.0.0
 WTForms==3.0.1
 SQLAlchemy==2.0.19
-python-dotenv~=1.0.0
+python-dotenv
 gunicorn==21.2.0
