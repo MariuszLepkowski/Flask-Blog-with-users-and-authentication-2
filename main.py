@@ -12,6 +12,7 @@ from forms import CreatePostForm
 from decorators import admin_only
 from dotenv import load_dotenv
 import os
+from flask_migrate import Migrate
 
 load_dotenv()
 
@@ -29,6 +30,8 @@ login_manager.init_app(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DB_URI']
 db = SQLAlchemy()
 db.init_app(app)
+
+migrate = Migrate(app, db)
 
 gravatar = Gravatar(app,
                     size=100,
