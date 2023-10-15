@@ -12,5 +12,6 @@ python-dotenv
 gunicorn==21.2.0
 email_validator==2.0.0.post2
 psycopg2-binary
+Flask-Migrate==4.0.5
 
 
